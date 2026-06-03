@@ -1,4 +1,10 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
   --blue-dark: #052288;
@@ -17,7 +23,7 @@
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -41,7 +47,7 @@ body {
   gap: 1rem;
 }
 .logo {
-  font-family: 'Syne', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 800;
   font-size: 1.25rem;
   color: #fff;
@@ -49,7 +55,7 @@ body {
 }
 .tagline {
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   text-transform: lowercase;
   letter-spacing: 0.05em;
 }
@@ -60,7 +66,7 @@ body {
   padding: 3rem 1rem 1.5rem;
 }
 .hero h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 800;
   color: var(--blue-dark);
@@ -99,7 +105,7 @@ body {
 }
 
 .section-label {
-  font-family: 'Syne', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -130,11 +136,13 @@ body {
   padding: 0.65rem 0.9rem;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   font-size: 0.95rem;
   color: var(--text);
   background: #fafafa;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   outline: none;
 }
 .field-group input:focus,
@@ -144,7 +152,9 @@ body {
   box-shadow: 0 0 0 3px rgba(4, 83, 204, 0.1);
   background: #fff;
 }
-.field-group textarea { resize: vertical; }
+.field-group textarea {
+  resize: vertical;
+}
 
 /* CHECKBOXES */
 .checkboxes {
@@ -163,10 +173,15 @@ body {
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--border);
   background: #fafafa;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
   user-select: none;
 }
-.check-item:hover { background: var(--blue-light); border-color: var(--blue-action); }
+.check-item:hover {
+  background: var(--blue-light);
+  border-color: var(--blue-action);
+}
 .check-item input[type="checkbox"] {
   width: 16px;
   height: 16px;
@@ -192,10 +207,7 @@ body {
   background: var(--blue-dark);
   color: #fff;
   padding: 0.9rem 1.25rem;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  font-family: "Nunito", sans-serif;
 }
 .resumo-body {
   padding: 1.25rem;
@@ -209,8 +221,14 @@ body {
   font-size: 0.9rem;
   color: var(--muted);
 }
-.urgencia-row span:last-child { color: var(--warning); font-weight: 500; }
-.desconto-row span:last-child { color: var(--success); font-weight: 500; }
+.urgencia-row span:last-child {
+  color: var(--warning);
+  font-weight: 500;
+}
+.desconto-row span:last-child {
+  color: var(--success);
+  font-weight: 500;
+}
 
 .resumo-total {
   display: flex;
@@ -219,12 +237,13 @@ body {
   border-top: 1.5px solid var(--border);
   margin-top: 0.5rem;
   padding-top: 0.75rem;
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.05rem;
+  font-family: "Nunito", sans-serif;
   color: var(--blue-dark);
 }
-#totalFinal { font-size: 1.5rem; color: var(--blue-action); }
+#totalFinal {
+  font-size: 1.5rem;
+  color: var(--blue-action);
+}
 
 .parcelamento {
   font-size: 0.8rem;
@@ -249,15 +268,17 @@ body {
   border: none;
   border-radius: var(--radius-sm);
   padding: 0.85rem;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  transition: background 0.15s, transform 0.1s;
+  font-family: "Nunito", sans-serif;
+  transition:
+    background 0.15s,
+    transform 0.1s;
 }
-.btn-gerar:hover { background: #033fa8; }
-.btn-gerar:active { transform: scale(0.98); }
+.btn-gerar:hover {
+  background: #033fa8;
+}
+.btn-gerar:active {
+  transform: scale(0.98);
+}
 
 .btn-reset {
   width: 100%;
@@ -266,23 +287,32 @@ body {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.65rem;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
-.btn-reset:hover { border-color: var(--danger); color: var(--danger); }
+.btn-reset:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
 
 /* FOOTER */
 .footer {
   background: var(--blue-dark);
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
   text-align: center;
   padding: 1rem;
   font-size: 0.8rem;
 }
-.footer strong { color: rgba(255,255,255,0.75); }
-.heart { color: #f87171; }
+.footer strong {
+  color: rgba(255, 255, 255, 0.75);
+}
+.heart {
+  color: #f87171;
+}
 
 /* TOAST */
 .toast {

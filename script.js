@@ -1,156 +1,170 @@
 const LABELS_PROJETO = {
-  "800":  "Landing Page simples",
-  "1400": "Site institucional (até 5 páginas)",
-  "2200": "Site institucional (até 10 páginas)",
-  "2800": "E-commerce básico",
-  "4500": "E-commerce completo",
-  "1800": "Sistema web / painel admin",
-  "3500": "App web completo",
+  350: "Landing Page simples",
+  650: "Site institucional (até 5 páginas)",
+  1100: "Site institucional (até 10 páginas)",
+  1400: "E-commerce básico",
+  2500: "E-commerce completo",
+  900: "Sistema web / painel admin",
+  2000: "App web completo",
 };
 
 const PRAZO_LABELS = {
-  "1":   "Entrega normal: 15 a 30 dias úteis",
-  "1.3": "Entrega urgente: 7 a 14 dias úteis",
-  "1.6": "Entrega super urgente: até 7 dias úteis",
+  1: "Entrega normal: 15 a 30 dias úteis",
+  1.3: "Entrega urgente: 7 a 14 dias úteis",
+  1.6: "Entrega super urgente: até 7 dias úteis",
 };
 
 function formatBRL(valor) {
-  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 function calcular() {
-  const projetoEl = document.getElementById('tipoProjeto');
-  const prazoEl   = document.getElementById('prazo');
-  const descEl    = document.getElementById('desconto');
+  const projetoEl = document.getElementById("tipoProjeto");
+  const prazoEl = document.getElementById("prazo");
+  const descEl = document.getElementById("desconto");
 
-  const baseVal   = parseFloat(projetoEl.value) || 0;
+  const baseVal = parseFloat(projetoEl.value) || 0;
   const prazoMult = parseFloat(prazoEl.value) || 1;
-  const descPct   = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
+  const descPct = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
 
-  const checkboxes = document.querySelectorAll('.check-item input[type="checkbox"]:checked');
+  const checkboxes = document.querySelectorAll(
+    '.check-item input[type="checkbox"]:checked',
+  );
   let extrasVal = 0;
-  checkboxes.forEach(cb => extrasVal += parseFloat(cb.value));
+  checkboxes.forEach((cb) => (extrasVal += parseFloat(cb.value)));
 
-  const subtotal    = (baseVal + extrasVal) * prazoMult;
-  const desconto    = subtotal * (descPct / 100);
-  const total       = subtotal - desconto;
+  const subtotal = (baseVal + extrasVal) * prazoMult;
+  const desconto = subtotal * (descPct / 100);
+  const total = subtotal - desconto;
   const urgenciaAdd = (baseVal + extrasVal) * (prazoMult - 1);
 
   // Linha base
-  const rowBase  = document.getElementById('rowBase');
-  const valBase  = document.getElementById('valBase');
+  const rowBase = document.getElementById("rowBase");
+  const valBase = document.getElementById("valBase");
   if (baseVal > 0) {
-    rowBase.style.display = 'flex';
+    rowBase.style.display = "flex";
     valBase.textContent = formatBRL(baseVal);
   } else {
-    rowBase.style.display = 'none';
+    rowBase.style.display = "none";
   }
 
   // Extras
-  const listaExtras = document.getElementById('listaExtras');
-  listaExtras.innerHTML = '';
-  checkboxes.forEach(cb => {
-    const row = document.createElement('div');
-    row.className = 'resumo-row';
-    row.innerHTML = `<span>${cb.closest('label').textContent.trim()}</span><span>${formatBRL(parseFloat(cb.value))}</span>`;
+  const listaExtras = document.getElementById("listaExtras");
+  listaExtras.innerHTML = "";
+  checkboxes.forEach((cb) => {
+    const row = document.createElement("div");
+    row.className = "resumo-row";
+    row.innerHTML = `<span>${cb.closest("label").textContent.trim()}</span><span>${formatBRL(parseFloat(cb.value))}</span>`;
     listaExtras.appendChild(row);
   });
 
   // Urgência
-  const rowUrgencia = document.getElementById('rowUrgencia');
-  const valUrgencia = document.getElementById('valUrgencia');
-  if (prazoMult > 1 && (baseVal + extrasVal) > 0) {
-    rowUrgencia.style.display = 'flex';
-    valUrgencia.textContent = '+' + formatBRL(urgenciaAdd);
+  const rowUrgencia = document.getElementById("rowUrgencia");
+  const valUrgencia = document.getElementById("valUrgencia");
+  if (prazoMult > 1 && baseVal + extrasVal > 0) {
+    rowUrgencia.style.display = "flex";
+    valUrgencia.textContent = "+" + formatBRL(urgenciaAdd);
   } else {
-    rowUrgencia.style.display = 'none';
+    rowUrgencia.style.display = "none";
   }
 
   // Desconto
-  const rowDesconto   = document.getElementById('rowDesconto');
-  const valDesconto   = document.getElementById('valDesconto');
-  const labelDesconto = document.getElementById('labelDesconto');
+  const rowDesconto = document.getElementById("rowDesconto");
+  const valDesconto = document.getElementById("valDesconto");
+  const labelDesconto = document.getElementById("labelDesconto");
   if (descPct > 0 && total > 0) {
-    rowDesconto.style.display = 'flex';
+    rowDesconto.style.display = "flex";
     labelDesconto.textContent = `Desconto (${descPct}%)`;
-    valDesconto.textContent   = '-' + formatBRL(desconto);
+    valDesconto.textContent = "-" + formatBRL(desconto);
   } else {
-    rowDesconto.style.display = 'none';
+    rowDesconto.style.display = "none";
   }
 
   // Total
-  document.getElementById('totalFinal').textContent = formatBRL(total);
+  document.getElementById("totalFinal").textContent = formatBRL(total);
 
   // Parcelamento
-  const parcEl    = document.getElementById('parcelamento');
-  const parcNum   = document.getElementById('parcelas');
-  const parcVal   = document.getElementById('valParcela');
+  const parcEl = document.getElementById("parcelamento");
+  const parcNum = document.getElementById("parcelas");
+  const parcVal = document.getElementById("valParcela");
   if (total >= 300) {
-    parcEl.style.display = 'block';
+    parcEl.style.display = "block";
     const numParcelas = total >= 1500 ? 6 : total >= 800 ? 3 : 2;
-    parcNum.textContent = numParcelas + 'x';
+    parcNum.textContent = numParcelas + "x";
     parcVal.textContent = formatBRL(total / numParcelas);
   } else {
-    parcEl.style.display = 'none';
+    parcEl.style.display = "none";
   }
 
   // Prazo
-  const prazoBox   = document.getElementById('prazoBox');
-  const prazoLabel = document.getElementById('prazoLabel');
-  prazoBox.style.display = 'block';
-  prazoLabel.textContent = PRAZO_LABELS[prazoEl.value] || '';
+  const prazoBox = document.getElementById("prazoBox");
+  const prazoLabel = document.getElementById("prazoLabel");
+  prazoBox.style.display = "block";
+  prazoLabel.textContent = PRAZO_LABELS[prazoEl.value] || "";
 }
 
 function resetar() {
-  document.getElementById('nomeCliente').value = '';
-  document.getElementById('tipoNegocio').value = '';
-  document.getElementById('tipoProjeto').value = '0';
-  document.getElementById('prazo').value = '1';
-  document.getElementById('desconto').value = '0';
-  document.getElementById('obs').value = '';
-  document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.getElementById("nomeCliente").value = "";
+  document.getElementById("tipoNegocio").value = "";
+  document.getElementById("tipoProjeto").value = "0";
+  document.getElementById("prazo").value = "1";
+  document.getElementById("desconto").value = "0";
+  document.getElementById("obs").value = "";
+  document
+    .querySelectorAll('.check-item input[type="checkbox"]')
+    .forEach((cb) => (cb.checked = false));
   calcular();
-  showToast('Formulário limpo!');
+  showToast("Formulário limpo!");
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  const t = document.getElementById("toast");
   t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2800);
 }
 
 function gerarPDF() {
-  const nome       = document.getElementById('nomeCliente').value.trim() || 'Cliente não informado';
-  const negocio    = document.getElementById('tipoNegocio').value || 'Não informado';
-  const projetoEl  = document.getElementById('tipoProjeto');
-  const prazoEl    = document.getElementById('prazo');
-  const descEl     = document.getElementById('desconto');
-  const obs        = document.getElementById('obs').value.trim();
+  const nome =
+    document.getElementById("nomeCliente").value.trim() ||
+    "Cliente não informado";
+  const negocio =
+    document.getElementById("tipoNegocio").value || "Não informado";
+  const projetoEl = document.getElementById("tipoProjeto");
+  const prazoEl = document.getElementById("prazo");
+  const descEl = document.getElementById("desconto");
+  const obs = document.getElementById("obs").value.trim();
 
-  const baseVal    = parseFloat(projetoEl.value) || 0;
-  const prazoMult  = parseFloat(prazoEl.value) || 1;
-  const descPct    = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
-  const labelProj  = LABELS_PROJETO[projetoEl.value] || 'Não selecionado';
+  const baseVal = parseFloat(projetoEl.value) || 0;
+  const prazoMult = parseFloat(prazoEl.value) || 1;
+  const descPct = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
+  const labelProj = LABELS_PROJETO[projetoEl.value] || "Não selecionado";
 
-  if (baseVal === 0) { showToast('Selecione o tipo de projeto primeiro.'); return; }
+  if (baseVal === 0) {
+    showToast("Selecione o tipo de projeto primeiro.");
+    return;
+  }
 
-  const checkboxes = document.querySelectorAll('.check-item input[type="checkbox"]:checked');
+  const checkboxes = document.querySelectorAll(
+    '.check-item input[type="checkbox"]:checked',
+  );
   let extrasVal = 0;
-  let extrasHTML = '';
-  checkboxes.forEach(cb => {
+  let extrasHTML = "";
+  checkboxes.forEach((cb) => {
     const v = parseFloat(cb.value);
     extrasVal += v;
-    extrasHTML += `<tr><td>${cb.closest('label').textContent.trim()}</td><td style="text-align:right">${formatBRL(v)}</td></tr>`;
+    extrasHTML += `<tr><td>${cb.closest("label").textContent.trim()}</td><td style="text-align:right">${formatBRL(v)}</td></tr>`;
   });
 
-  const subtotal   = (baseVal + extrasVal) * prazoMult;
-  const desconto   = subtotal * (descPct / 100);
-  const total      = subtotal - desconto;
-  const urgAdd     = (baseVal + extrasVal) * (prazoMult - 1);
+  const subtotal = (baseVal + extrasVal) * prazoMult;
+  const desconto = subtotal * (descPct / 100);
+  const total = subtotal - desconto;
+  const urgAdd = (baseVal + extrasVal) * (prazoMult - 1);
   const numParcelas = total >= 1500 ? 6 : total >= 800 ? 3 : 2;
-  const hoje       = new Date().toLocaleDateString('pt-BR');
-  const validade   = new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString('pt-BR');
+  const hoje = new Date().toLocaleDateString("pt-BR");
+  const validade = new Date(
+    Date.now() + 7 * 24 * 60 * 60 * 1000,
+  ).toLocaleDateString("pt-BR");
 
   const htmlContent = `
   <!DOCTYPE html>
@@ -208,14 +222,14 @@ function gerarPDF() {
       <tbody>
         <tr><td>${labelProj}</td><td>${formatBRL(baseVal)}</td></tr>
         ${extrasHTML}
-        ${prazoMult > 1 ? `<tr class="tr-urgencia"><td>Adicional de urgência (${PRAZO_LABELS[prazoEl.value]})</td><td>+${formatBRL(urgAdd)}</td></tr>` : ''}
-        ${descPct > 0 ? `<tr class="tr-desconto"><td>Desconto (${descPct}%)</td><td>-${formatBRL(desconto)}</td></tr>` : ''}
+        ${prazoMult > 1 ? `<tr class="tr-urgencia"><td>Adicional de urgência (${PRAZO_LABELS[prazoEl.value]})</td><td>+${formatBRL(urgAdd)}</td></tr>` : ""}
+        ${descPct > 0 ? `<tr class="tr-desconto"><td>Desconto (${descPct}%)</td><td>-${formatBRL(desconto)}</td></tr>` : ""}
         <tr class="tr-total"><td>Total</td><td>${formatBRL(total)}</td></tr>
       </tbody>
     </table>
-    ${total >= 300 ? `<div class="parcelamento">ou em até ${numParcelas}x de ${formatBRL(total / numParcelas)}</div>` : ''}
+    ${total >= 300 ? `<div class="parcelamento">ou em até ${numParcelas}x de ${formatBRL(total / numParcelas)}</div>` : ""}
 
-    ${obs ? `<h2>Observações</h2><div class="obs-box">${obs}</div>` : ''}
+    ${obs ? `<h2>Observações</h2><div class="obs-box">${obs}</div>` : ""}
 
     <div class="validade">⏳ Este orçamento é válido até ${validade}</div>
 
@@ -228,11 +242,14 @@ function gerarPDF() {
   </body>
   </html>`;
 
-  const win = window.open('', '_blank');
-  if (!win) { showToast('Permita popups para gerar o PDF.'); return; }
+  const win = window.open("", "_blank");
+  if (!win) {
+    showToast("Permita popups para gerar o PDF.");
+    return;
+  }
   win.document.write(htmlContent);
   win.document.close();
-  showToast('PDF gerado com sucesso!');
+  showToast("PDF gerado com sucesso!");
 }
 
 // Inicializa o cálculo ao carregar
