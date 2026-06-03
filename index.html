@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerador de Orçamento | victory_dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <span class="logo">victory_dev</span>
+      <span class="tagline">gerador de orçamento</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <h1>Monte o orçamento do seu projeto</h1>
+      <p>Preencha os campos abaixo e gere um orçamento profissional em segundos.</p>
+    </section>
+
+    <div class="grid">
+
+      <form class="form-card" id="formOrcamento">
+
+        <div class="section-label">Cliente</div>
+
+        <div class="field-group">
+          <label for="nomeCliente">Nome do cliente</label>
+          <input type="text" id="nomeCliente" placeholder="Ex: Clínica Saúde & Bem-estar"/>
+        </div>
+
+        <div class="field-group">
+          <label for="tipoNegocio">Tipo de negócio</label>
+          <select id="tipoNegocio">
+            <option value="">Selecione...</option>
+            <option>Academia</option>
+            <option>Clínica / Consultório</option>
+            <option>Restaurante / Cafeteria</option>
+            <option>Pet Shop</option>
+            <option>Salão de Beleza / Estética</option>
+            <option>Imobiliária</option>
+            <option>Advocacia / Contabilidade</option>
+            <option>E-commerce</option>
+            <option>Hotel / Pousada</option>
+            <option>Empresa de Delivery</option>
+            <option>Escola / Curso Online</option>
+            <option>Energia Solar</option>
+            <option>Construtora</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Projeto</div>
+
+        <div class="field-group">
+          <label for="tipoProjeto">Tipo de projeto</label>
+          <select id="tipoProjeto" onchange="calcular()">
+            <option value="0">Selecione...</option>
+            <option value="800">Landing Page simples</option>
+            <option value="1400">Site institucional (até 5 páginas)</option>
+            <option value="2200">Site institucional (até 10 páginas)</option>
+            <option value="2800">E-commerce básico</option>
+            <option value="4500">E-commerce completo</option>
+            <option value="1800">Sistema web / painel admin</option>
+            <option value="3500">App web completo</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Extras</label>
+          <div class="checkboxes">
+            <label class="check-item">
+              <input type="checkbox" value="300" onchange="calcular()"/> SEO básico
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="200" onchange="calcular()"/> Integração WhatsApp
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="400" onchange="calcular()"/> Painel de edição (CMS)
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="350" onchange="calcular()"/> Formulário de contato / leads
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="500" onchange="calcular()"/> Integração com Google Analytics
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="600" onchange="calcular()"/> Automação de e-mails
+            </label>
+            <label class="check-item">
+              <input type="checkbox" value="450" onchange="calcular()"/> Design UI/UX personalizado
+            </label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="prazo">Prazo de entrega</label>
+          <select id="prazo" onchange="calcular()">
+            <option value="1">Normal (15-30 dias)</option>
+            <option value="1.3">Urgente (7-14 dias) +30%</option>
+            <option value="1.6">Super urgente (até 7 dias) +60%</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="desconto">Desconto (%)</label>
+          <input type="number" id="desconto" placeholder="0" min="0" max="50" value="0" oninput="calcular()"/>
+        </div>
+
+        <div class="field-group">
+          <label for="obs">Observações</label>
+          <textarea id="obs" rows="3" placeholder="Detalhes adicionais sobre o projeto..."></textarea>
+        </div>
+
+      </form>
+
+      <div class="resultado-col">
+
+        <div class="resumo-card" id="resumoCard">
+          <div class="resumo-header">
+            <span>Resumo do orçamento</span>
+          </div>
+
+          <div class="resumo-body">
+            <div class="resumo-row" id="rowBase" style="display:none">
+              <span>Projeto base</span>
+              <span id="valBase">R$ 0</span>
+            </div>
+            <div id="listaExtras"></div>
+            <div class="resumo-row urgencia-row" id="rowUrgencia" style="display:none">
+              <span>Adicional de urgência</span>
+              <span id="valUrgencia"></span>
+            </div>
+            <div class="resumo-row desconto-row" id="rowDesconto" style="display:none">
+              <span id="labelDesconto">Desconto</span>
+              <span id="valDesconto"></span>
+            </div>
+
+            <div class="resumo-total">
+              <span>Total</span>
+              <span id="totalFinal">R$ 0</span>
+            </div>
+
+            <div class="parcelamento" id="parcelamento" style="display:none">
+              <span>ou em até <strong id="parcelas">3x</strong> de <strong id="valParcela"></strong></span>
+            </div>
+          </div>
+
+          <div class="prazo-box" id="prazoBox" style="display:none">
+            <span id="prazoLabel"></span>
+          </div>
+        </div>
+
+        <button class="btn-gerar" onclick="gerarPDF()">
+          Gerar PDF do orçamento
+        </button>
+
+        <button class="btn-reset" onclick="resetar()">Limpar tudo</button>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Feito com <span class="heart">♥</span> por <strong>victory_dev</strong> &mdash; victorydev.vercel.app</span>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
