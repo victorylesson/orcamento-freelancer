@@ -1,3 +1,44 @@
+// ========================
+// MEUS DADOS (localStorage)
+// ========================
+
+function salvarMeusDados() {
+  const dados = {
+    nome: document.getElementById("meuNome").value.trim(),
+    whatsapp: document.getElementById("meuWhatsapp").value.trim(),
+    email: document.getElementById("meuEmail").value.trim(),
+    site: document.getElementById("meuSite").value.trim(),
+  };
+  localStorage.setItem("victory_meus_dados", JSON.stringify(dados));
+  const msg = document.getElementById("dadosSalvosMsg");
+  msg.textContent = "Dados salvos!";
+  msg.classList.add("show");
+  setTimeout(() => msg.classList.remove("show"), 2500);
+}
+
+function carregarMeusDados() {
+  const raw = localStorage.getItem("victory_meus_dados");
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if (d.nome) document.getElementById("meuNome").value = d.nome;
+    if (d.whatsapp) document.getElementById("meuWhatsapp").value = d.whatsapp;
+    if (d.email) document.getElementById("meuEmail").value = d.email;
+    if (d.site) document.getElementById("meuSite").value = d.site;
+  } catch (e) {}
+}
+
+function getMeusDados() {
+  return {
+    nome: document.getElementById("meuNome").value.trim() || "victory_dev",
+    whatsapp: document.getElementById("meuWhatsapp").value.trim() || "",
+    email: document.getElementById("meuEmail").value.trim() || "",
+    site:
+      document.getElementById("meuSite").value.trim() ||
+      "victory-dev.vercel.app",
+  };
+}
+
 const LABELS_PROJETO = {
   350: "Landing Page simples",
   650: "Site institucional (até 5 páginas)",
@@ -166,6 +207,7 @@ function gerarPDF() {
     Date.now() + 7 * 24 * 60 * 60 * 1000,
   ).toLocaleDateString("pt-BR");
 
+  const eu = getMeusDados();
   const htmlContent = `
   <!DOCTYPE html>
   <html lang="pt-BR">
@@ -200,8 +242,10 @@ function gerarPDF() {
   <body>
     <div class="header">
       <div>
-        <div class="brand">victory<span>_dev</span></div>
-        <div style="font-size:12px; color:#888; margin-top:4px">victorydev.vercel.app</div>
+        <div class="brand">${eu.nome}</div>
+        <div style="font-size:12px; color:#888; margin-top:4px">${eu.site}</div>
+        ${eu.whatsapp ? `<div style="font-size:12px; color:#888;">${eu.whatsapp}</div>` : ""}
+        ${eu.email ? `<div style="font-size:12px; color:#888;">${eu.email}</div>` : ""}
       </div>
       <div class="meta">
         <div><strong>Orçamento #${String(Date.now()).slice(-5)}</strong></div>
@@ -234,7 +278,7 @@ function gerarPDF() {
     <div class="validade">⏳ Este orçamento é válido até ${validade}</div>
 
     <div class="footer">
-      <span>victory_dev &mdash; Desenvolvimento Web &amp; Automações</span>
+      <span>${eu.nome} &mdash; Desenvolvimento Web &amp; Automações</span>
       <span>Documento gerado automaticamente</span>
     </div>
 
@@ -253,4 +297,5 @@ function gerarPDF() {
 }
 
 // Inicializa o cálculo ao carregar
+carregarMeusDados();
 calcular();

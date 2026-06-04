@@ -30,6 +30,39 @@
 
       <div class="grid">
         <form class="form-card" id="formOrcamento">
+          <div class="section-label">Meus dados</div>
+
+          <div class="meus-dados-grid">
+            <div class="field-group">
+              <label for="meuNome">Seu nome / empresa</label>
+              <input type="text" id="meuNome" />
+            </div>
+            <div class="field-group">
+              <label for="meuWhatsapp">Seu WhatsApp</label>
+              <input type="text" id="meuWhatsapp" />
+            </div>
+            <div class="field-group">
+              <label for="meuEmail">Seu e-mail</label>
+              <input type="email" id="meuEmail" />
+            </div>
+            <div class="field-group">
+              <label for="meuSite">Seu site / portfólio</label>
+              <input type="text" id="meuSite" />
+            </div>
+          </div>
+
+          <div class="salvar-dados-row">
+            <button
+              type="button"
+              class="btn-salvar-dados"
+              onclick="salvarMeusDados()"
+            >
+              Salvar meus dados
+            </button>
+            <span class="dados-salvos-msg" id="dadosSalvosMsg"></span>
+          </div>
+
+          <div class="divider"></div>
           <div class="section-label">Cliente</div>
 
           <div class="field-group">
