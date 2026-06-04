@@ -390,3 +390,153 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* BOTÃO WHATSAPP */
+.btn-whatsapp {
+  width: 100%;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+.btn-whatsapp:active {
+  transform: scale(0.98);
+}
+
+/* BOTÃO SALVAR HISTÓRICO */
+.btn-salvar-historico {
+  width: 100%;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1.5px solid #16a34a;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.btn-salvar-historico:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+/* SEÇÃO HISTÓRICO */
+.historico-section {
+  max-width: 1100px;
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+}
+.historico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.historico-header h2 {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+}
+.btn-limpar-hist {
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.9rem;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.btn-limpar-hist:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.historico-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.hist-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: box-shadow 0.15s;
+}
+.hist-card:hover {
+  box-shadow: 0 4px 16px rgba(5, 34, 136, 0.08);
+}
+.hist-card-nome {
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--blue-dark);
+}
+.hist-card-proj {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.hist-card-total {
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--blue-action);
+  margin-top: 0.25rem;
+}
+.hist-card-data {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+.hist-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.hist-btn {
+  flex: 1;
+  padding: 0.4rem 0;
+  border-radius: var(--radius-sm);
+  font-family: "Nunito", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.hist-btn.carregar {
+  border-color: var(--blue-action);
+  color: var(--blue-action);
+}
+.hist-btn.carregar:hover {
+  background: var(--blue-action);
+  color: #fff;
+}
+.hist-btn.excluir:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}

@@ -296,6 +296,203 @@ function gerarPDF() {
   showToast("PDF gerado com sucesso!");
 }
 
-// Inicializa o cálculo ao carregar
+// ========================
+// WHATSAPP
+// ========================
+
+function enviarWhatsApp() {
+  const nome = document.getElementById("nomeCliente").value.trim() || "cliente";
+  const projetoEl = document.getElementById("tipoProjeto");
+  const prazoEl = document.getElementById("prazo");
+  const descEl = document.getElementById("desconto");
+  const eu = getMeusDados();
+
+  const baseVal = parseFloat(projetoEl.value) || 0;
+  if (baseVal === 0) {
+    showToast("Selecione o tipo de projeto primeiro.");
+    return;
+  }
+
+  const prazoMult = parseFloat(prazoEl.value) || 1;
+  const descPct = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
+  const labelProj = LABELS_PROJETO[projetoEl.value] || "";
+
+  const checkboxes = document.querySelectorAll(
+    '.check-item input[type="checkbox"]:checked',
+  );
+  let extrasVal = 0;
+  let extrasTexto = "";
+  checkboxes.forEach((cb) => {
+    extrasVal += parseFloat(cb.value);
+    extrasTexto += `\n  • ${cb.closest("label").textContent.trim()}: ${formatBRL(parseFloat(cb.value))}`;
+  });
+
+  const subtotal = (baseVal + extrasVal) * prazoMult;
+  const desconto = subtotal * (descPct / 100);
+  const total = subtotal - desconto;
+  const numParcelas = total >= 1500 ? 6 : total >= 800 ? 3 : 2;
+  const validade = new Date(
+    Date.now() + 7 * 24 * 60 * 60 * 1000,
+  ).toLocaleDateString("pt-BR");
+
+  const msg = `Olá, ${nome}! 👋
+
+Segue o orçamento do seu projeto:
+
+📋 *${labelProj}*${extrasTexto ? `\nExtras:${extrasTexto}` : ""}
+${descPct > 0 ? `\n🎁 Desconto de ${descPct}%` : ""}
+${prazoMult > 1 ? `\n⚡ Prazo: ${PRAZO_LABELS[prazoEl.value]}` : ""}
+
+💰 *Total: ${formatBRL(total)}*
+${total >= 300 ? `(ou ${numParcelas}x de ${formatBRL(total / numParcelas)})` : ""}
+
+📅 Proposta válida até ${validade}
+
+Qualquer dúvida, estou à disposição! 🚀
+— ${eu.nome}`;
+
+  const numero = eu.whatsapp.replace(/\D/g, "");
+  const url = `https://wa.me/5581991482982?text=${encodeURIComponent(msg)}`;
+
+  window.open(url, "_blank");
+}
+
+// ========================
+// HISTÓRICO (localStorage)
+// ========================
+
+function getHistorico() {
+  try {
+    return JSON.parse(localStorage.getItem("victory_historico") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function salvarNoHistorico() {
+  const nome = document.getElementById("nomeCliente").value.trim();
+  const negocio = document.getElementById("tipoNegocio").value;
+  const projetoEl = document.getElementById("tipoProjeto");
+  const prazoEl = document.getElementById("prazo");
+  const descEl = document.getElementById("desconto");
+  const obs = document.getElementById("obs").value.trim();
+
+  const baseVal = parseFloat(projetoEl.value) || 0;
+  if (baseVal === 0 || !nome) {
+    showToast("Preencha o cliente e o tipo de projeto antes de salvar.");
+    return;
+  }
+
+  const prazoMult = parseFloat(prazoEl.value) || 1;
+  const descPct = Math.min(Math.max(parseFloat(descEl.value) || 0, 0), 50);
+
+  const checkboxes = document.querySelectorAll(
+    '.check-item input[type="checkbox"]:checked',
+  );
+  let extrasVal = 0;
+  const extrasSelecionados = [];
+  checkboxes.forEach((cb) => {
+    extrasVal += parseFloat(cb.value);
+    extrasSelecionados.push({
+      label: cb.closest("label").textContent.trim(),
+      valor: parseFloat(cb.value),
+    });
+  });
+
+  const subtotal = (baseVal + extrasVal) * prazoMult;
+  const desconto = subtotal * (descPct / 100);
+  const total = subtotal - desconto;
+
+  const registro = {
+    id: Date.now(),
+    data: new Date().toLocaleDateString("pt-BR"),
+    nome,
+    negocio,
+    projeto: projetoEl.value,
+    labelProj: LABELS_PROJETO[projetoEl.value] || "",
+    prazo: prazoEl.value,
+    descPct,
+    extras: extrasSelecionados,
+    total,
+    obs,
+  };
+
+  const hist = getHistorico();
+  hist.unshift(registro);
+  if (hist.length > 30) hist.pop();
+  localStorage.setItem("victory_historico", JSON.stringify(hist));
+
+  renderHistorico();
+  showToast("Salvo no histórico!");
+}
+
+function renderHistorico() {
+  const hist = getHistorico();
+  const section = document.getElementById("historicoSection");
+  const lista = document.getElementById("historicoLista");
+
+  if (hist.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+  lista.innerHTML = "";
+
+  hist.forEach((r) => {
+    const card = document.createElement("div");
+    card.className = "hist-card";
+    card.innerHTML = `
+      <div class="hist-card-nome">${r.nome}</div>
+      <div class="hist-card-proj">${r.labelProj}${r.negocio ? " · " + r.negocio : ""}</div>
+      <div class="hist-card-total">${formatBRL(r.total)}</div>
+      <div class="hist-card-data">Salvo em ${r.data}</div>
+      <div class="hist-card-actions">
+        <button class="hist-btn carregar" onclick="carregarOrcamento(${r.id})">Carregar</button>
+        <button class="hist-btn excluir" onclick="excluirOrcamento(${r.id})">Excluir</button>
+      </div>`;
+    lista.appendChild(card);
+  });
+}
+
+function carregarOrcamento(id) {
+  const r = getHistorico().find((x) => x.id === id);
+  if (!r) return;
+
+  document.getElementById("nomeCliente").value = r.nome;
+  document.getElementById("tipoNegocio").value = r.negocio;
+  document.getElementById("tipoProjeto").value = r.projeto;
+  document.getElementById("prazo").value = r.prazo;
+  document.getElementById("desconto").value = r.descPct;
+  document.getElementById("obs").value = r.obs || "";
+
+  document
+    .querySelectorAll('.check-item input[type="checkbox"]')
+    .forEach((cb) => {
+      const label = cb.closest("label").textContent.trim();
+      cb.checked = r.extras.some((e) => e.label === label);
+    });
+
+  calcular();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  showToast("Orçamento carregado!");
+}
+
+function excluirOrcamento(id) {
+  const hist = getHistorico().filter((x) => x.id !== id);
+  localStorage.setItem("victory_historico", JSON.stringify(hist));
+  renderHistorico();
+  showToast("Removido do histórico.");
+}
+
+function limparHistorico() {
+  if (!confirm("Tem certeza que quer apagar todo o histórico?")) return;
+  localStorage.removeItem("victory_historico");
+  renderHistorico();
+  showToast("Histórico apagado.");
+}
+
+// Inicializa
 carregarMeusDados();
 calcular();
+renderHistorico();
