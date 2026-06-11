@@ -22,7 +22,7 @@ Ferramenta web para geração de orçamentos profissionais para projetos de dese
 
 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/orcamento-freelancer.git
+git clone https://github.com/victorylesson/orcamento-freelancer.git
 cd orcamento-freelancer
 ```
 
